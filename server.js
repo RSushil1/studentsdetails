@@ -4,21 +4,15 @@ const { connectToDb, getDb } = require('./db');
 const { ObjectId } = require('mongodb');
 const dotenv = require('dotenv')
 const { GetAllStudentsList,studentById,studentByName,createDoc,deleteDoc,updateDoc } = require('./services/studentService');
+const path = require('path');
 
+app.use(express.static(path.join(__dirname, './client/build')))
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 dotenv.config();
-// Database Connection
-let db;
-connectToDb((err)=>{
-    if(!err){
-    app.listen(process.env.PORT, () => {
-        console.log(`app listening on port ${process.env.PORT}...`)});
-    }
-    db = getDb();    
-})
+
 
 // routes
 app.get('/', (req, res) => {
@@ -67,5 +61,21 @@ app.delete('/students/:id', async (req, res) => {
 app.put('/students/:id',async (req, res) => {
     let result = await updateDoc( new ObjectId(req.params.id),req.body, db);
     res.status(200).json(result);
+})
+
+
+//rest api
+app.use("*", function(req, res){
+    res.sendFile(path.join(__dirname, "./client/build/index.html"))
+  })
+
+// Database Connection
+let db;
+connectToDb((err)=>{
+    if(!err){
+    app.listen(process.env.PORT, () => {
+        console.log(`app listening on port ${process.env.PORT}...`)});
+    }
+    db = getDb();    
 })
 
