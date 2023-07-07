@@ -1,8 +1,15 @@
-import React from 'react'
-import {NavLink} from 'react-router-dom'
+import React, { useState } from 'react'
+import {NavLink, useNavigate} from 'react-router-dom'
 import {PiStudentDuotone} from 'react-icons/pi'
 
 const Header = () => {
+  const [first_name, setFirstName] = useState();
+  const navigate = useNavigate();
+
+  const searchName = (e)=>{
+    e.preventDefault();
+    navigate(`/search?name=${first_name}`);
+  }
   return (
     <header>
       <nav className="navbar navbar-expand-lg bg-primary shadow">
@@ -12,8 +19,8 @@ const Header = () => {
     </button>
     <div className="collapse navbar-collapse " id="navbarTogglerDemo01">
       <NavLink className="navbar-brand text-light" to="/"><PiStudentDuotone/>Info Web</NavLink>
-      <form className="navbar-nav ms-auto mb-2 mb-lg-0" role="search">
-        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+      <form onSubmit={searchName} className="navbar-nav ms-auto mb-2 mb-lg-0">
+        <input value={first_name} onChange={(e)=>setFirstName(e.target.value)} className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
         <button className="btn btn-outline-success btn-warning" type="submit">Search</button>
       </form>
     </div>

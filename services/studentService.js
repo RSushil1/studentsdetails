@@ -73,7 +73,8 @@ module.exports.studentById = function (id, db) {
 // get student by name
 module.exports.studentByName = function (firstName, db) {
     return db.collection('Students')
-        .findOne({ first_name: firstName })
+        .find({ first_name: firstName })
+        .toArray()
         .then((doc) => {
             return doc;
         }).catch((err) => {

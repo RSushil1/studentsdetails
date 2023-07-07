@@ -24,21 +24,25 @@ const Details = () => {
   const [city, setCity] = useState("");
   const navigate = useNavigate("");
 
-  // useEffect(() => {
-  //   if (_id) {
-  //     getById();
-  //   }
-  // }, [_id]);
-
   useEffect(() => {
     getById();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-  // useEffect(() => {
-  //   if (_id && !student) {
-  //     getById();
-  //   }
-  // }, [_id, student]);
+  }, []);
+
+  useEffect(() => {
+    setId(student.id)
+    setFirstName(student.first_name)
+    setLastName(student.last_name)
+    setEmail(student.email)
+    setAge(student.age)
+    setAddress(student.address)
+    setGpa(student.gpa)
+    setGraduationDate(student.graduation_date)
+    setGender(student.gender)
+    setPhoneNumber(student.phone_number)
+    setMajor(student.major)
+    setCity(student.city)
+    
+  }, [student]);
 
   const getById = async () => {
     try {
@@ -51,34 +55,24 @@ const Details = () => {
     }
   };
   // form edit
-  const handleEditSubmit = async (_id) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     try {
-      const res = await axios.put(`/students/${_id}`, {
-        id,
-        first_name,
-        last_name,
-        email,
-        age,
-        major,
-        gpa,
-        graduation_date,
-        gender,
-        address,
-        phone_number,
-        city,
+
+      const {data} = await axios.put(`/students/${student._id}`, {
+        id,first_name,last_name,email,age,address,gpa,graduation_date,gender,phone_number,major,city
       });
-      if (res.data.success) {
-        toast.success(res.data.message);
-        console.log(student._id)
+      if (data?.success) {
+        toast.success(data.message);
+        setStudent(data.doc)
         navigate(`/details?id=${student._id}`);
-        setStudent(res.data.doc)
      
       } else {
-        toast.error(res.data.message);
+        toast.error(data.message);
       }
     } catch (error) {
       toast.error("Something Went Wrong!");
-    }
+    } 
   };
   // form delete
   const handleDeleteSubmit = async (id) => {
@@ -185,8 +179,9 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid3"
                                   placeholder="name@example.com"
-                                  defaultValue={student.id}
+                                  value={id}
                                   required
+                                  autoFocus
                                 />
                                 <label htmlFor="floatingInputGrid">ID</label>
                               </div>
@@ -194,7 +189,6 @@ const Details = () => {
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
-                               
                                   onChange={(e) => setFirstName(e.target.value)}
                                   type="text"
                                   className="form-control"
@@ -202,6 +196,7 @@ const Details = () => {
                                   placeholder="name@example.com"
                                   value={first_name}
                                   required
+                                  autoFocus
                                 />
                                 <label htmlFor="floatingInputGrid">
                                   First Name
@@ -218,8 +213,9 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid2"
                                   placeholder="name@example.com"
-                                  defaultValue={student.last_name}
+                                  value={last_name}
                                   required
+                                  autoFocus
                                 />
                                 <label htmlFor="floatingInputGrid">
                                   Last Name
@@ -234,7 +230,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid4"
                                   placeholder="name@example.com"
-                                  defaultValue={student.email}
+                                  value={email}
                                   required
                                 />
                                 <label htmlFor="floatingInputGrid">Email</label>
@@ -251,7 +247,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid5"
                                   placeholder="name@example.com"
-                                  defaultValue={student.age}
+                                  value={age}
                                 />
                                 <label htmlFor="floatingInputGrid">Age</label>
                               </div>
@@ -267,7 +263,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid6"
                                   placeholder="name@example.com"
-                                  defaultValue={student.phone_number}
+                                  value={phone_number}
                                 />
                                 <label htmlFor="floatingInputGrid">
                                   Phone Number
@@ -285,7 +281,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid7"
                                   placeholder="name@example.com"
-                                  defaultValue={student.address}
+                                  value={address}
                                 />
                                 <label htmlFor="floatingInputGrid">
                                   Address
@@ -301,7 +297,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid8"
                                   placeholder="name@example.com"
-                                  defaultValue={student.city}
+                                  value={city}
                                 />
                                 <label htmlFor="floatingInputGrid">City</label>
                               </div>
@@ -317,7 +313,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid9"
                                   placeholder="name@example.com"
-                                  defaultValue={student.gpa}
+                                  value={gpa}
                                 />
                                 <label htmlFor="floatingInputGrid">GPA</label>
                               </div>
@@ -333,7 +329,7 @@ const Details = () => {
                                   className="form-control"
                                   id="floatingInputGrid10"
                                   placeholder="name@example.com"
-                                  defaultValue={student.graduation_date}
+                                  value={graduation_date}
                                 />
                                 <label htmlFor="floatingInputGrid">
                                   Graduation Date
@@ -350,7 +346,7 @@ const Details = () => {
                                   
                                   onChange={(e) => setMajor(e.target.value)}
                                 >
-                                  <option selected>{student.major}</option>
+                                  <option value>{major}</option>
                                   <option value="Information Technology">
                                     Information Technology
                                   </option>
@@ -381,7 +377,7 @@ const Details = () => {
                                
                                   onChange={(e) => setGender(e.target.value)}
                                 >
-                                  <option selected>{student.gender}</option>
+                                  <option value>{gender}</option>
                                   <option value="Male">Male</option>
                                   <option value="Female">Female</option>
                                 </select>
@@ -401,7 +397,7 @@ const Details = () => {
                         >
                           Close
                         </button>
-                        <button type="submit" value="submit" onClick={()=>handleEditSubmit(student._id)} className="btn btn-primary" data-bs-dismiss="modal">
+                        <button type="submit" value="Refresh Page" onClick={(e)=>handleUpdate(e)} className="btn btn-primary" data-bs-dismiss="modal">
                           Save
                         </button>
                       </div>
