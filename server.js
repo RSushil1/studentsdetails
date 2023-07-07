@@ -2,18 +2,20 @@ const express = require('express');
 const cors = require('cors');
 const { connectToDb, getDb } = require('./db');
 const { ObjectId } = require('mongodb');
+const dotenv = require('dotenv')
 const { GetAllStudentsList,studentById,studentByName,createDoc,deleteDoc,updateDoc } = require('./services/studentService');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+dotenv.config();
 // Database Connection
 let db;
 connectToDb((err)=>{
     if(!err){
-    app.listen(4000, () => {
-        console.log('app listening on port 4000...')});
+    app.listen(process.env.PORT, () => {
+        console.log(`app listening on port ${process.env.PORT}...`)});
     }
     db = getDb();    
 })
