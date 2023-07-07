@@ -26,7 +26,7 @@ const Details = () => {
 
   useEffect(() => {
     getById();
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     setId(student.id)
@@ -321,7 +321,6 @@ const Details = () => {
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
-                                 
                                   onChange={(e) =>
                                     setGraduationDate(e.target.value)
                                   }
@@ -374,7 +373,6 @@ const Details = () => {
                                 <select
                                   className="form-select"
                                   id="floatingSelectGrid12"
-                               
                                   onChange={(e) => setGender(e.target.value)}
                                 >
                                   <option value>{gender}</option>
