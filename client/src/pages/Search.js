@@ -22,6 +22,7 @@ const Search = () => {
           const { data } = await axios.get(`/students/name/${first_name}`);
           if (data) {
             setStudents(data);
+            
           }
         } catch (error) {
           console.log(error);
@@ -37,6 +38,13 @@ const Search = () => {
     <>
       <Layout>
         <div className="container mt-5">
+        <h1 className="text-center">Search Resuts</h1>
+          <h6 className="text-center">
+            {students?.length < 1
+              ? "No Students Found"
+              : `${students?.length} Found`
+              } 
+          </h6>
           <table
             id="myTable"
             className="table table-bordered table-success table-striped"

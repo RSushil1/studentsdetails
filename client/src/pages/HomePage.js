@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Link, useNavigate} from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [id, setId] = useState("");
@@ -20,6 +19,9 @@ const HomePage = () => {
   const [city, setCity] = useState("");
   const navigate = useNavigate("");
 
+  // const [cId, setCId] = useState("");
+  const [availableIds, setAvailableIds] = useState([]);
+
   const limit = 10;
   const [page, setPage] = useState("1");
 
@@ -29,8 +31,8 @@ const HomePage = () => {
   const [totalPage, setTotalPage] = useState();
   const [totalStudents, setTotalStudents] = useState();
   const currentPage =
-    ((Number(nextPage || Number(previousPage) + 2) + Number(previousPage || 0)) /
-    2)
+    (Number(nextPage || Number(previousPage) + 2) + Number(previousPage || 0)) /
+    2;
 
   // form function
   const handleSubmit = async (e) => {
@@ -52,7 +54,6 @@ const HomePage = () => {
       });
       if (res.data.success) {
         toast.success(res.data.message);
-        console.log(res.data.doc.insertedId)
         navigate(`/details?id=${res.data.doc.insertedId}`);
       } else {
         toast.error(res.data.message);
@@ -64,9 +65,9 @@ const HomePage = () => {
 
   useEffect(() => {
     getAllStudents();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
-  
+
 
   // paginated list of students
   const getAllStudents = async () => {
@@ -77,22 +78,21 @@ const HomePage = () => {
       setNextPage(data.nextPage);
       setTotalPage(data.totalPage);
       setTotalStudents(data.totalStudents);
-     
     } catch (error) {
       console.log(error);
     }
   };
 
   const handlePrevPage = () => {
-    setPage(currentPage-1)
+    setPage(currentPage - 1);
   };
 
   const handleNextPage = () => {
-    setPage(currentPage+1)
+    setPage(currentPage + 1);
   };
-  
+
   const handlePageChange = (p) => {
-    setPage(p)
+    setPage(p);
   };
 
   const createPaginationButton = () => {
@@ -101,13 +101,17 @@ const HomePage = () => {
       if (currentPage === i) {
         paginationButtons.push(
           <li key={i} className="page-item active" aria-current="page">
-            <Link onClick={()=>handlePageChange(i)} className="page-link">{i}</Link>
+            <Link onClick={() => handlePageChange(i)} className="page-link">
+              {i}
+            </Link>
           </li>
         );
       } else {
         paginationButtons.push(
           <li key={i} className="page-item">
-            <Link onClick={()=>handlePageChange(i)} className="page-link">{i}</Link>
+            <Link onClick={() => handlePageChange(i)} className="page-link">
+              {i}
+            </Link>
           </li>
         );
       }
@@ -115,9 +119,21 @@ const HomePage = () => {
     return paginationButtons;
   };
 
-  
   const handleViewDetails = (id) => {
     navigate(`/details?id=${id}`);
+  };
+
+  // check available Ids
+  const availableId = async (e) => {
+    e.preventDefault();
+
+    // Make an API request to check if the ID exists
+    try {
+      const res = await axios.get("/filterId");
+      setAvailableIds(res?.data.availableId);
+    } catch (error) {
+      console.error("Error checking ID:", error);
+    }
   };
 
   return (
@@ -134,6 +150,7 @@ const HomePage = () => {
               className="btn btn-primary mb-3 ms-3 btn-sm col-sm-1  "
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
+              onClick={availableId}
             >
               Create New
             </button>
@@ -166,7 +183,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="first_name"
+                            name="first_name"
                             value={first_name}
                             onChange={(e) => setFirstName(e.target.value)}
                             type="text"
@@ -181,7 +198,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="last_name"
+                            name="last_name"
                             value={last_name}
                             onChange={(e) => setLastName(e.target.value)}
                             type="text"
@@ -196,24 +213,23 @@ const HomePage = () => {
                     </div>
                     <div className="row g-2">
                       <div className="col-md">
-                        <div className="form-floating">
-                          <input
+                        <select
+                          className="form-select"
+                          aria-label="Default select example"
                           name="id"
-                            value={id}
-                            onChange={(e) => setId(e.target.value)}
-                            type="number"
-                            className="form-control"
-                            id="floatingInputGrid3"
-                            placeholder="name@example.com"
-                            required
-                          />
-                          <label htmlFor="floatingInputGrid">ID</label>
-                        </div>
+                          value={id}
+                          onChange={(e) => setId(e.target.value)}
+                        >
+                          <option defaultValue>Available IDs</option>
+                          {availableIds?.map((i) => (
+                            <option value={i}>{i}</option>
+                          ))}
+                        </select>
                       </div>
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="email"
+                            name="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             type="text"
@@ -230,7 +246,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="age"
+                            name="age"
                             type="text"
                             value={age}
                             onChange={(e) => setAge(e.target.value)}
@@ -244,7 +260,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="phone_number"
+                            name="phone_number"
                             type="text"
                             value={phone_number}
                             onChange={(e) => setPhoneNumber(e.target.value)}
@@ -262,7 +278,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="address"
+                            name="address"
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
@@ -276,7 +292,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="city"
+                            name="city"
                             type="text"
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
@@ -292,7 +308,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="gpa"
+                            name="gpa"
                             type="text"
                             value={gpa}
                             onChange={(e) => setGpa(e.target.value)}
@@ -306,7 +322,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <input
-                          name="graduation_date"
+                            name="graduation_date"
                             type="date"
                             value={graduation_date}
                             onChange={(e) => setGraduationDate(e.target.value)}
@@ -324,13 +340,13 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <select
-                          name="major"
+                            name="major"
                             value={major}
                             onChange={(e) => setMajor(e.target.value)}
                             className="form-select"
                             id="floatingSelectGrid11"
                           >
-                            <option defaultValue/>
+                            <option defaultValue />
                             <option value="Information Technology">
                               Information Technology
                             </option>
@@ -354,7 +370,7 @@ const HomePage = () => {
                       <div className="col-md">
                         <div className="form-floating">
                           <select
-                          name="gender"
+                            name="gender"
                             value={gender}
                             onChange={(e) => setGender(e.target.value)}
                             className="form-select"
@@ -377,10 +393,11 @@ const HomePage = () => {
                         Close
                       </button>
                       <button
+                        id="save"
                         type="submit"
                         value="Refresh Page"
                         className="btn btn-primary"
-                          data-bs-dismiss="modal"
+                        data-bs-dismiss="modal"
                       >
                         Save
                       </button>
@@ -415,10 +432,10 @@ const HomePage = () => {
                       <button
                         key={s._id}
                         type="button"
-                        className ="btn btn-primary btn-sm"
+                        className="btn btn-primary btn-sm"
                         onClick={() => handleViewDetails(s._id)}
                       >
-                        <Link className='btn btn-primary btn-sm text-light'>
+                        <Link className="btn btn-primary btn-sm text-light">
                           Details
                         </Link>
                       </button>

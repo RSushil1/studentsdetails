@@ -3,15 +3,18 @@ const cors = require('cors');
 const { connectToDb, getDb } = require('./db');
 const { ObjectId } = require('mongodb');
 const dotenv = require('dotenv')
-const { GetAllStudentsList,studentById,studentByName,createDoc,deleteDoc,updateDoc } = require('./services/studentService');
-const path = require('path');
+const { GetAllStudentsList,studentById,studentByName,createDoc,deleteDoc,updateDoc,filterId } = require('./services/studentService');
+// const path = require('path');
+// const {fileURLToPath}= require('url');
 
-app.use(express.static(path.join(__dirname, './client/build')))
+
 const app = express();
 app.use(express.json());
 app.use(cors());
+// app.use(express.static('./client/build'))
 
 dotenv.config();
+
 
 
 // routes
@@ -63,11 +66,32 @@ app.put('/students/:id',async (req, res) => {
     res.status(200).json(result);
 })
 
+// Endpoint for checking if the ID exists
+app.get('/filterId', async (req, res) => {
+    let result = await filterId(db);
+    res.status(200).json(result); 
 
-//rest api
-app.use("*", function(req, res){
-    res.sendFile(path.join(__dirname, "./client/build/index.html"))
-  })
+})
+  
+  
+// app.get('/students/filterId', async (req, res) => {
+  
+//     try {
+//         const result = await db.collection('Students').findOne({id: parseInt(id) });
+  
+//       const exists = result !== null;
+//       res.json({ exists });
+//     } catch (error) {
+//       console.error('Error checking ID:', error);
+//       res.status(500).json({ error: 'An error occurred while checking the ID' });
+//     }
+//   });
+  
+  
+// //rest api
+// app.use("*", function(req, res){
+//     res.sendFile(path.join(__dirname, "./client/build/index.html"))
+//   })
 
 // Database Connection
 let db;

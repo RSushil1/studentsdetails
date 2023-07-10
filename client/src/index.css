@@ -11,3 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.aboutText{
+  background:linear-gradient(to right, rgb(36, 124, 255),rgb(67, 227, 255),rgb(255, 39, 251));
+}
+
+.footer a{
+  text-decoration: none;
+  color: rgb(86, 233, 252);
+  padding:10px;
+}
+
+.footer a:hover{
+  color: blue;
+  border-bottom: 1px solid blue;
+}

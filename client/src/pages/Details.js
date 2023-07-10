@@ -8,7 +8,6 @@ const Details = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const _id = searchParams.get("id");
-  console.log(_id);
 
   const [id, setId] = useState("");
   const [first_name, setFirstName] = useState("");
@@ -174,21 +173,6 @@ const Details = () => {
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
-                                  onChange={(e) => setId(e.target.value)}
-                                  type="number"
-                                  className="form-control"
-                                  id="floatingInputGrid3"
-                                  placeholder="name@example.com"
-                                  value={id}
-                                  required
-                                  autoFocus
-                                />
-                                <label htmlFor="floatingInputGrid">ID</label>
-                              </div>
-                            </div>
-                            <div className="col-md">
-                              <div className="form-floating">
-                                <input
                                   onChange={(e) => setFirstName(e.target.value)}
                                   type="text"
                                   className="form-control"
@@ -203,8 +187,6 @@ const Details = () => {
                                 </label>
                               </div>
                             </div>
-                          </div>
-                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -222,6 +204,8 @@ const Details = () => {
                                 </label>
                               </div>
                             </div>
+                          </div>
+                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -236,8 +220,6 @@ const Details = () => {
                                 <label htmlFor="floatingInputGrid">Email</label>
                               </div>
                             </div>
-                          </div>
-                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -252,6 +234,8 @@ const Details = () => {
                                 <label htmlFor="floatingInputGrid">Age</label>
                               </div>
                             </div>
+                          </div>
+                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -270,8 +254,6 @@ const Details = () => {
                                 </label>
                               </div>
                             </div>
-                          </div>
-                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -288,6 +270,8 @@ const Details = () => {
                                 </label>
                               </div>
                             </div>
+                          </div>
+                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -302,8 +286,6 @@ const Details = () => {
                                 <label htmlFor="floatingInputGrid">City</label>
                               </div>
                             </div>
-                          </div>
-                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -318,6 +300,8 @@ const Details = () => {
                                 <label htmlFor="floatingInputGrid">GPA</label>
                               </div>
                             </div>
+                          </div>
+                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <input
@@ -335,8 +319,6 @@ const Details = () => {
                                 </label>
                               </div>
                             </div>
-                          </div>
-                          <div className="row g-2">
                             <div className="col-md">
                               <div className="form-floating">
                                 <select
@@ -368,6 +350,8 @@ const Details = () => {
                                 </label>
                               </div>
                             </div>
+                          </div>
+                          <div className="row g-2 m-1 ms-auto">
                             <div className="col-md">
                               <div className="form-floating">
                                 <select
