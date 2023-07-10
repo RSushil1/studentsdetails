@@ -1,5 +1,3 @@
-// get all students list
-// const { connectToDb, getDb } = require('../db');
 const { ObjectId } = require("mongodb");
 
 module.exports.GetAllStudentsList = function (page, limit, db) {
@@ -52,41 +50,8 @@ module.exports.GetAllStudentsList = function (page, limit, db) {
         });
     });
 };
-//available ids
-// module.exports.filterId = function (db) {
-//   let results = {};
-//   let existedId = [];
-//   const totalIds = 100;
 
-//     // Create an array of all IDs from 1 to 100
-//     const allIds = Array.from({ length: totalIds }, (_, index) => index + 1);
-
-//   const query = { id: { $gt: 0 } };
-//   const options = {
-//     // sort returned documents in ascending order by id
-//     sort: { id: 1 },
-//     // Include only the `id`
-//     projection: {_id: 0, id: 1 },
-//   };
-
-//   return db
-//     .collection("Students")
-//     .find(query, options) // cursor toArray forEach
-//     .forEach((ids) => existedId.push(ids))
-//     .then((_) => {
-//       results.existedId = existedId;
-//       results.error = null;
-//       results.availableId = allIds.filter((item) => {
-//         return item !== existedId;
-//       });
-//       return results;
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       results.error = err;
-//       return results;
-//     });
-// };
+//Return available ids
 
 module.exports.filterId = function (db) {
     let results = {};
@@ -153,19 +118,31 @@ module.exports.studentByName = function (firstName, db) {
 // Create Document
 
 module.exports.createDoc = function (doc, db) {
+  if (!doc.id) {
+    return {
+      success: false,
+      message: "Id must be choosed!",
+    };
+  }
   if (!doc.first_name) {
-    console.error("first name is required...");
-    return error;
+    return {
+      success: false,
+      message: "First Name must be filled!",
+    };
   }
 
   if (!doc.last_name) {
-    console.error("last name is required...");
-    return error;
+    return {
+      success: false,
+      message: "Last Name must be filled!",
+    };
   }
 
   if (!doc.email) {
-    console.error("email is required...");
-    return error;
+    return {
+      success: false,
+      message: "Email must be filled!",
+    };
   }
 
   const student = {

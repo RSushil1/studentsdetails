@@ -68,7 +68,6 @@ const HomePage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-
   // paginated list of students
   const getAllStudents = async () => {
     try {
@@ -187,12 +186,11 @@ const HomePage = () => {
                             value={first_name}
                             onChange={(e) => setFirstName(e.target.value)}
                             type="text"
-                            className="form-control"
+                            className="form-control border border-success"
                             id="floatingInputGrid1"
                             placeholder="name@example.com"
-                            required
                           />
-                          <label htmlFor="floatingInputGrid">First Name</label>
+                          <label htmlFor="floatingInputGrid">First Name*</label>
                         </div>
                       </div>
                       <div className="col-md">
@@ -202,29 +200,33 @@ const HomePage = () => {
                             value={last_name}
                             onChange={(e) => setLastName(e.target.value)}
                             type="text"
-                            className="form-control"
+                            className="form-control border border-success"
                             id="floatingInputGrid2"
                             placeholder="name@example.com"
-                            required
                           />
-                          <label htmlFor="floatingInputGrid">Last Name</label>
+                          <label htmlFor="floatingInputGrid">Last Name*</label>
                         </div>
                       </div>
                     </div>
                     <div className="row g-2">
                       <div className="col-md">
-                        <select
-                          className="form-select"
-                          aria-label="Default select example"
-                          name="id"
-                          value={id}
-                          onChange={(e) => setId(e.target.value)}
-                        >
-                          <option defaultValue>Available IDs</option>
-                          {availableIds?.map((i) => (
-                            <option value={i}>{i}</option>
-                          ))}
-                        </select>
+                        <div className="form-floating">
+                          <select
+                            className="form-select border border-success"
+                            aria-label="Default select example"
+                            name="id"
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
+                          >
+                            <option defaultValue></option>
+                            {availableIds?.map((i) => (
+                              <option value={i}>{i}</option>
+                            ))}
+                          </select>
+                          <label htmlFor="floatingSelectGrid">
+                            Available Id*
+                          </label>
+                        </div>
                       </div>
                       <div className="col-md">
                         <div className="form-floating">
@@ -233,12 +235,11 @@ const HomePage = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             type="text"
-                            className="form-control"
+                            className="form-control border border-success"
                             id="floatingInputGrid4"
                             placeholder="name@example.com"
-                            required
                           />
-                          <label htmlFor="floatingInputGrid">Email</label>
+                          <label htmlFor="floatingInputGrid">Email*</label>
                         </div>
                       </div>
                     </div>
