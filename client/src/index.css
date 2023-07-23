@@ -26,3 +26,10 @@ code {
   color: blue;
   border-bottom: 1px solid blue;
 }
+
+.icon{
+  color:chartreuse;
+  /* color:rgb(254, 254, 108); */
+  text-decoration: none;
+  
+}

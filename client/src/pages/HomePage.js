@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Layout from "../components/Layout/Layout";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { ImSortAlphaAsc } from 'react-icons/im';
+import { ImSortNumericAsc } from 'react-icons/im';
+// export * from "gsap";
+import {gsap} from 'gsap';
 
 const HomePage = () => {
   const [id, setId] = useState("");
@@ -18,12 +22,15 @@ const HomePage = () => {
   const [major, setMajor] = useState("");
   const [city, setCity] = useState("");
   const navigate = useNavigate("");
+  
 
-  // const [cId, setCId] = useState("");
   const [availableIds, setAvailableIds] = useState([]);
 
+  const [sortMethod, setSortMethod] = useState('id'); // Default sorting method is 'name'
+  const [page, setPage] = useState(1);
+
+
   const limit = 10;
-  const [page, setPage] = useState("1");
 
   const [students, setStudents] = useState([]);
   const [previousPage, setPreviousPage] = useState();
@@ -64,9 +71,13 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getAllStudents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+    if (sortMethod === 'name') {
+      getSortByNameStudents();
+    } else {
+      getAllStudents();
+    }
+  }, [sortMethod, page]);
+
 
   // paginated list of students
   const getAllStudents = async () => {
@@ -81,6 +92,32 @@ const HomePage = () => {
       console.log(error);
     }
   };
+
+  // paginated list of students
+  const getSortByNameStudents = async () => {
+    try {
+      const { data } = await axios.get(`/studentsSort?page=${page}&limit=${limit}`);
+      setStudents(data.students);
+      setPreviousPage(data.previousPage);
+      setNextPage(data.nextPage);
+      setTotalPage(data.totalPage);
+      setTotalStudents(data.totalStudents);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // soting
+  const handleSortByName = () => {
+    setSortMethod('name');
+    setPage(1); // Reset the current page to 1 when changing sorting method
+  };
+
+  const handleSortById = () => {
+    setSortMethod('id');
+    setPage(1); // Reset the current page to 1 when changing sorting method
+  };
+
 
   const handlePrevPage = () => {
     setPage(currentPage - 1);
@@ -134,16 +171,34 @@ const HomePage = () => {
       console.error("Error checking ID:", error);
     }
   };
+  const elementRef = useRef(null);
+  const cr = useRef(null);
+
+  useEffect(() => {
+    // The element we want to animate
+    const element = elementRef.current;
+    const crb = cr.current;
+
+    // Animate the element with gsap.from
+    gsap.from(element, {opacity:0, x:'100%', duration:0.7, delay:0.3 });
+    gsap.from(crb, {x:'80%', duration: 1, delay:0.3 });
+
+    // Optionally, you can clean up the animation when the component unmounts
+    return () => {
+      gsap.killTweensOf(element);
+    };
+  }, []);
+ 
 
   return (
-    <Layout>
+    <Layout >
       <div>
-        <div className="container">
-          <h2 className="text-center p-2">List of all Students</h2>
+        <div ref={elementRef} className="container">
+          <h2  className="headtext text-center p-2">List of all Students</h2>
         </div>
         <div className="container">
           {/* Button trigger modal */}
-          <div className="row">
+          <div ref={cr} className="row">
             <button
               type="button"
               className="btn btn-primary mb-3 ms-3 btn-sm col-sm-1  "
@@ -408,15 +463,17 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-          <div className="container">
+          <div  ref={elementRef} className="container">
             <table
               id="myTable"
               className="table table-bordered table-success table-striped"
             >
               <thead className="table-dark">
                 <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">First Name</th>
+                  <th scope="col">Id
+                    <Link onClick={handleSortById} type="button" className="icon ms-2"><ImSortNumericAsc />Sort</Link></th>
+                  <th scope="col">First Name
+                    <Link onClick={handleSortByName} type="button" className="icon ms-2"><ImSortAlphaAsc />Sort</Link></th>
                   <th scope="col">Last Name</th>
                   <th scope="col">Email</th>
                   <th scope="col">View</th>

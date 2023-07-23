@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { gsap } from "gsap";
 const Details = () => {
   const [student, setStudent] = useState("");
   const location = useLocation();
@@ -88,6 +89,35 @@ const Details = () => {
     }
   };
 
+  const elementRef = useRef(null);
+  const img = useRef(null);
+
+  useEffect(() => {
+    // The element we want to animate
+    const element = elementRef.current;
+
+    // Animate the element with gsap.from
+    gsap.from(element, {opacity:0, duration:1, delay:0.5 });
+
+    // Optionally, you can clean up the animation when the component unmounts
+    return () => {
+      gsap.killTweensOf(element);
+    };
+  }, [location]);
+
+  useEffect(() => {
+    // The element we want to animate
+    const imgf = img.current;
+
+    // Animate the element with gsap.from
+    gsap.from(imgf, {opacity:0,duration: 0.5, delay:0.3 });
+
+    // Optionally, you can clean up the animation when the component unmounts
+    return () => {
+      gsap.killTweensOf(imgf);
+    };
+  }, []);
+
 
   return (
     <Layout>
@@ -104,12 +134,13 @@ const Details = () => {
                     src="./images/blank-profile-picture.jpg"
                     className="img-fluid rounded-start"
                     alt="studentImg"
+                    ref={img}
                   />
                 </div>
                 <div className="col-md-8">
-                  <div className="card-body" id="card_body">
+                  <div  ref={elementRef} className="card-body p-2" id="card_body">
                     <dl className="row">
-                      <h1 className="text-light bg-dark">
+                      <h1 className="text-light bg-primary">
                         {student.first_name} {student.last_name}
                       </h1>
                       <dt className="col-sm-5">Id</dt>
@@ -136,7 +167,7 @@ const Details = () => {
                   </div>
                 </div>
               </div>
-              <div className="text-center">
+              <div className="mb-3 text-center">
                 {/* Button trigger modal */}
                 <button
                   id="E"
@@ -390,7 +421,7 @@ const Details = () => {
                 <button
                   id="D"
                   type="button"
-                  className="btn btn-danger btn-sm "
+                  className="btn btn-danger btn-sm ms-2 "
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModa2"
                 >

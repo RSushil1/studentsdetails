@@ -6,7 +6,7 @@ const Contacts = () => {
   return (
     <>
       <Layout>
-      <div className="row d-flex justify-content-center mb-5" style={{ marginTop: "100px" }}>
+      <div className="row container justify-content-center mb-5 ms-5" style={{ marginTop: "100px" }}>
         <div className="col-md-6 ">
           <img
             src="/images/about.avif"

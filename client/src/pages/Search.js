@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { gsap } from "gsap";
 
 
 const Search = () => {
@@ -34,6 +35,21 @@ const Search = () => {
     navigate(`/details?id=${id}`);
   };
 
+  const sr = useRef(null);
+
+  useEffect(() => {
+    // The element we want to animate
+    const element = sr.current;
+
+    // Animate the element with gsap.from
+    gsap.from(element, {opacity:0, x:'50%', duration: 0.5, delay:0.3 });
+
+    // Optionally, you can clean up the animation when the component unmounts
+    return () => {
+      gsap.killTweensOf(element);
+    };
+  }, [first_name]);
+
   return (
     <>
       <Layout>
@@ -46,6 +62,7 @@ const Search = () => {
               } 
           </h6>
           <table
+            ref={sr}
             id="myTable"
             className="table table-bordered table-success table-striped"
           >

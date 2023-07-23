@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {NavLink, useNavigate} from 'react-router-dom'
 import {PiStudentDuotone} from 'react-icons/pi'
+import { gsap } from 'gsap';
 
 const Header = () => {
   const [first_name, setFirstName] = useState();
@@ -10,6 +11,22 @@ const Header = () => {
     e.preventDefault();
     navigate(`/search?name=${first_name}`);
   }
+
+  const sf = useRef(null);
+
+  useEffect(() => {
+    // The element we want to animate
+    const element = sf.current;
+
+    // Animate the element with gsap.from
+    gsap.from(element, {opacity:0, x:'50%', duration: 0.5, delay:0.3 });
+
+    // Optionally, you can clean up the animation when the component unmounts
+    return () => {
+      gsap.killTweensOf(element);
+    };
+  }, []);
+
   return (
     <header>
       <nav className="navbar navbar-expand-lg bg-primary shadow">
@@ -19,7 +36,7 @@ const Header = () => {
     </button>
     <div className="collapse navbar-collapse " id="navbarTogglerDemo01">
       <NavLink className="navbar-brand text-light" to="/"><PiStudentDuotone/>Info Web</NavLink>
-      <form onSubmit={searchName} className="navbar-nav ms-auto mb-2 mb-lg-0">
+      <form ref={sf} onSubmit={searchName} className="navbar-nav ms-auto mb-2 mb-lg-0">
         <input value={first_name} onChange={(e)=>setFirstName(e.target.value)} className="form-control me-2" type="text" placeholder="Search" aria-label="Search" />
         <button className="btn btn-outline-success btn-warning" type="submit">Search</button>
       </form>
